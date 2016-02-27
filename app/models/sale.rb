@@ -4,7 +4,7 @@ class Sale < ActiveRecord::Base
 
   before_create :set_password
 
-  @password = nil
+  attr_reader :password
 
   def date=(d)
     self.dt = Date.parse(d)
@@ -27,10 +27,6 @@ class Sale < ActiveRecord::Base
   def password=(password)
     @password = password
     self.encrypted_password = password_digest(password)
-  end
-
-  def password
-    @password
   end
 
   def authorized?(password)
