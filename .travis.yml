@@ -4,4 +4,4 @@ rvm:
 services:
   - postgresql
 before_script:
-  psql -c 'create database rails-test_test;' -U postgres
+  psql -c 'create database rails_test_test;' -U postgres
