@@ -33,6 +33,10 @@ class Api::SalesController < ApplicationController
       render json: {error: 'sale not found'}, status: 404
       return false
     end
+    unless @sale.authorized?(params[:password])
+      render json: {error: 'Unauthorized'}, status: 401
+      return false
+    end
   end
 
 end

@@ -60,9 +60,17 @@ describe 'Sales API', :type => :request do
   describe 'delete sale by id' do
     context 'deleting an existing sale' do
       let!(:sale) { sale_factory }
-      it 'delete successfully the sale' do
-        delete "/api/sales/#{sale.id}.json"
-        expect(response).to have_http_status(200)
+      context 'using a correct password' do
+        it 'delete successfully the sale' do
+          delete "/api/sales/#{sale.id}.json", password: 'strongpassword'
+          expect(response).to have_http_status(200)
+        end
+      end
+      context 'using an incorrect password' do
+        it 'returns status 401: Unauthorized' do
+          delete "/api/sales/#{sale.id}.json", password: 'wrongpassword'
+          expect(response).to have_http_status(401)
+        end
       end
     end
     context 'deleting a non existing sale' do

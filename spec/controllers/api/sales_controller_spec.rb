@@ -30,7 +30,7 @@ RSpec.describe Api::SalesController, :type => :controller do
     context "getting an existing sale" do
       let!(:sale) { sale_factory }
       it 'returns the sale' do
-        get :show, id: sale.id
+        get :show, id: sale.id, password: 'strongpassword'
         json = json_response
         expect(json).to eq({"code" => "AB", "date" => "20160227", "id" => sale.id, "time" => "2012", "value" => "12.99"})
       end
@@ -47,7 +47,7 @@ RSpec.describe Api::SalesController, :type => :controller do
     context "deleting an existing sale" do
       let!(:sale) { sale_factory }
       it 'delete the sale' do
-        delete :destroy, id: sale.id
+        delete :destroy, id: sale.id, password: 'strongpassword'
         expect(response).to have_http_status(200)
         expect(Sale.count).to eq 0
       end

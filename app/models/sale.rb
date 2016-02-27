@@ -26,17 +26,25 @@ class Sale < ActiveRecord::Base
 
   def password=(password)
     @password = password
-    self.encrypted_password = Digest::SHA1.hexdigest(password)
+    self.encrypted_password = password_digest(password)
   end
 
   def password
     @password
   end
 
+  def authorized?(password)
+    !password.blank? && encrypted_password == password_digest(password)
+  end
+
   private
 
   def set_password
-    self.password = SecureRandom.hex
+    self.password ||= SecureRandom.hex
+  end
+
+  def password_digest(password)
+    Digest::SHA1.hexdigest(password)
   end
 
 end
