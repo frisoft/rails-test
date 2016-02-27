@@ -40,4 +40,15 @@ describe 'Sales API', :type => :request do
     end
   end
 
+  describe 'delete sale by id' do
+    let!(:sale) { sale_factory }
+
+    context 'deleting an existing sale' do
+      it 'delete successfully the sale' do
+        delete "/api/sales/#{sale.id}.json"
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
 end

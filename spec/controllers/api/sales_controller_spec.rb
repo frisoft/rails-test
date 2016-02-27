@@ -26,7 +26,7 @@ RSpec.describe Api::SalesController, :type => :controller do
     end
   end
 
-  describe 'GET show' do
+  describe 'GET sale' do
     context "getting an existing sale" do
       let!(:sale) { sale_factory }
       it 'returns the sale' do
@@ -38,6 +38,23 @@ RSpec.describe Api::SalesController, :type => :controller do
     context "getting a inexisting sale" do
       it 'returns status 404' do
         get :show, id: 666
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
+
+  describe 'DELETE sale' do
+    context "deleting an existing sale" do
+      let!(:sale) { sale_factory }
+      it 'delete the sale' do
+        delete :destroy, id: sale.id
+        expect(response).to have_http_status(200)
+        expect(Sale.count).to eq 0
+      end
+    end
+    context "deleting an inexisting sale" do
+      it 'returns status 404' do
+        delete :destroy, id: 666
         expect(response).to have_http_status(404)
       end
     end

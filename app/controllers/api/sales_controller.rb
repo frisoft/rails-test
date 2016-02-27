@@ -1,5 +1,7 @@
 class Api::SalesController < ApplicationController
 
+  before_action :get_sale,  only: [:show, :destroy]
+
   def create
     sales = [params[:sales]].flatten.map do |sale|
       Sale.create(secure_sale_params(sale))
@@ -10,11 +12,12 @@ class Api::SalesController < ApplicationController
   end
 
   def show
-    sale = Sale.find_by_id(params[:id])
-    if sale
-      render json: sale.as_json(only: [:id, :code, :value], methods: [:date, :time]), status: 201
-    else
-      render json: {error: 'sale not found'}, status: 404
+    render json: @sale.as_json(only: [:id, :code, :value], methods: [:date, :time]), status: 201
+  end
+
+  def destroy
+    if @sale.destroy
+      render json: {message: 'sale deleted'}, status: 200
     end
   end
 
@@ -22,6 +25,14 @@ class Api::SalesController < ApplicationController
 
   def secure_sale_params(params)
     params.permit(:date, :time, :code, :value)
+  end
+
+  def get_sale
+    @sale = Sale.find_by_id(params[:id])
+    unless @sale
+      render json: {error: 'sale not found'}, status: 404
+      return false
+    end
   end
 
 end

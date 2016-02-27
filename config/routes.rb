@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   namespace 'api' do
-    resources :sales, only: [:create, :show], :constraints => {:format => 'json'}
+    resources :sales, only: [:create, :show, :destroy], :constraints => {:format => 'json'}
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

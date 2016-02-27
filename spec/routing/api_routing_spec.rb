@@ -23,4 +23,15 @@ describe 'api routes', :type => :routing do
     end
   end
 
+  describe 'delete sale' do
+    it do
+      expect(delete: "/api/sales/#{1}.json").to route_to(
+        controller: 'api/sales',
+        action: 'destroy',
+        id: '1',
+        format: 'json'
+      )
+    end
+  end
+
 end
