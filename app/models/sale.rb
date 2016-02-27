@@ -1,4 +1,10 @@
+require 'securerandom'
+
 class Sale < ActiveRecord::Base
+
+  before_create :set_password
+
+  @password
 
   def date=(d)
     self.dt = Date.parse(d)
@@ -16,6 +22,21 @@ class Sale < ActiveRecord::Base
 
   def time
     tm.strftime('%H%M')
+  end
+
+  def password=(password)
+    @password = password
+    self.encrypted_password = Digest::SHA1.hexdigest(password)
+  end
+
+  def password
+    @password
+  end
+
+  private
+
+  def set_password
+    self.password = SecureRandom.hex
   end
 
 end

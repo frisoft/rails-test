@@ -7,7 +7,7 @@ class Api::SalesController < ApplicationController
       Sale.create(secure_sale_params(sale))
     end
     render json: {
-      sales: sales.as_json(only: [:id, :code, :value], methods: [:date, :time])
+      sales: sales.as_json(only: [:id, :code, :value], methods: [:date, :time, :password])
     }, status: 201
   end
 
