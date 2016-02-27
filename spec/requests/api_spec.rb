@@ -30,4 +30,14 @@ describe 'Sales API', :type => :request do
 
   end
 
+  describe 'get sale by id' do
+    let!(:sale) { sale_factory }
+
+    it 'returns the single sale as json' do
+      get "/api/sales/#{sale.id}.json"
+      json = json_response
+      expect(json).to eq({"code" => "AB", "date" => "20160227", "id" => sale.id, "time" => "2012", "value" => "12.99"})
+    end
+  end
+
 end

@@ -31,3 +31,7 @@ end
 def json_response
   JSON.parse(response.body)
 end
+
+def sale_factory
+  Sale.create(date: '20160227', time: '2012', code: 'AB', value: 12.99)
+end

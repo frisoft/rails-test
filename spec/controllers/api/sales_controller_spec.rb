@@ -26,4 +26,21 @@ RSpec.describe Api::SalesController, :type => :controller do
     end
   end
 
+  describe 'GET show' do
+    context "getting an existing sale" do
+      let!(:sale) { sale_factory }
+      it 'returns the sale' do
+        get :show, id: sale.id
+        json = json_response
+        expect(json).to eq({"code" => "AB", "date" => "20160227", "id" => sale.id, "time" => "2012", "value" => "12.99"})
+      end
+    end
+    context "getting a inexisting sale" do
+      it 'returns status 404' do
+        get :show, id: 666
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
+
 end
