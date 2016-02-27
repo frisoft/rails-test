@@ -31,12 +31,20 @@ describe 'Sales API', :type => :request do
   end
 
   describe 'get sale by id' do
-    let!(:sale) { sale_factory }
+    context 'getting an existing sale' do
+      let!(:sale) { sale_factory }
 
-    it 'returns the single sale as json' do
-      get "/api/sales/#{sale.id}.json"
-      json = json_response
-      expect(json).to eq({"code" => "AB", "date" => "20160227", "id" => sale.id, "time" => "2012", "value" => "12.99"})
+      it 'returns the single sale as json' do
+        get "/api/sales/#{sale.id}.json"
+        json = json_response
+        expect(json).to eq({"code" => "AB", "date" => "20160227", "id" => sale.id, "time" => "2012", "value" => "12.99"})
+      end
+    end
+    context 'getting a non existing sale' do
+      it 'returns srarys 404: not found' do
+        get "/api/sales/666.json"
+        expect(response).to have_http_status(404)
+      end
     end
   end
 
@@ -47,6 +55,12 @@ describe 'Sales API', :type => :request do
       it 'delete successfully the sale' do
         delete "/api/sales/#{sale.id}.json"
         expect(response).to have_http_status(:success)
+      end
+    end
+    context 'deleting a non existing sale' do
+      it 'returns srarys 404: not found' do
+        delete "/api/sales/666.json"
+        expect(response).to have_http_status(404)
       end
     end
   end
