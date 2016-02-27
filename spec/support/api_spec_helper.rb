@@ -33,5 +33,5 @@ def json_response
 end
 
 def sale_factory
-  Sale.create(date: '20160227', time: '2012', code: 'AB', value: 12.99)
+  Sale.create(date: '20160227', time: '2012', code: 'AB', value: 12.99, password: 'strongpassword')
 end

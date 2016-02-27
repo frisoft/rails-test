@@ -12,7 +12,7 @@ class Api::SalesController < ApplicationController
   end
 
   def show
-    render json: @sale.as_json(only: [:id, :code, :value], methods: [:date, :time]), status: 201
+    render json: @sale.as_json(only: [:id, :code, :value], methods: [:date, :time]), status: 200
   end
 
   def destroy

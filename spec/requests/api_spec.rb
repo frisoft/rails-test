@@ -34,14 +34,23 @@ describe 'Sales API', :type => :request do
     context 'getting an existing sale' do
       let!(:sale) { sale_factory }
 
-      it 'returns the single sale as json' do
-        get "/api/sales/#{sale.id}.json"
-        json = json_response
-        expect(json).to eq({"code" => "AB", "date" => "20160227", "id" => sale.id, "time" => "2012", "value" => "12.99"})
+      context 'using a correct password' do
+        it 'returns the single sale as json' do
+          get "/api/sales/#{sale.id}.json", password: 'strongpassword'
+          json = json_response
+          expect(response).to have_http_status(200)
+          expect(json).to eq({"code" => "AB", "date" => "20160227", "id" => sale.id, "time" => "2012", "value" => "12.99"})
+        end
+      end
+      context 'using an incorrect password' do
+        it 'returns status 401: Unauthorized' do
+          get "/api/sales/#{sale.id}.json", password: 'wrongpassword'
+          expect(response).to have_http_status(401)
+        end
       end
     end
     context 'getting a non existing sale' do
-      it 'returns srarys 404: not found' do
+      it 'returns status 404: not found' do
         get "/api/sales/666.json"
         expect(response).to have_http_status(404)
       end
@@ -49,12 +58,11 @@ describe 'Sales API', :type => :request do
   end
 
   describe 'delete sale by id' do
-    let!(:sale) { sale_factory }
-
     context 'deleting an existing sale' do
+      let!(:sale) { sale_factory }
       it 'delete successfully the sale' do
         delete "/api/sales/#{sale.id}.json"
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(200)
       end
     end
     context 'deleting a non existing sale' do
