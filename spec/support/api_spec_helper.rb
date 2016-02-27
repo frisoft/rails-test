@@ -17,6 +17,17 @@ def sales_params
   }
 end
 
+def single_sale_params
+  {
+    sales: {
+      date: '20140103',
+      time: '0700',
+      code: 'FL',
+      value: '2.00'
+    }
+  }
+end
+
 def json_response
   JSON.parse(response.body)
 end

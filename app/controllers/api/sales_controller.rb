@@ -1,7 +1,7 @@
 class Api::SalesController < ApplicationController
 
   def create
-    sales = params[:sales].map do |sale|
+    sales = [params[:sales]].flatten.map do |sale|
       Sale.create(secure_sale_params(sale))
     end
     render json: { sales: sales.as_json }, status: 201
