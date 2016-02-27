@@ -4,7 +4,7 @@ class Sale < ActiveRecord::Base
 
   before_create :set_password
 
-  @password
+  @password = nil
 
   def date=(d)
     self.dt = Date.parse(d)

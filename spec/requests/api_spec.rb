@@ -25,6 +25,13 @@ describe 'Sales API', :type => :request do
         expect(json).to include 'sales'
         expect(json['sales'].length).to eq 1
         expect(json['sales'].first.keys.sort).to eq ["code", "date", "id", "password", "time", "value"]
+        sale = json['sales'].first
+        expect(sale['id']).not_to be nil
+        expect(sale['code']).to eq 'FL'
+        expect(sale['value']).to eq "2.0"
+        expect(sale['date']).to eq "20140103"
+        expect(sale['time']).to eq "0700"
+        expect(sale['password']).not_to be nil
       end
     end
 
