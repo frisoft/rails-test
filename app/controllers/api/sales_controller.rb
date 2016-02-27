@@ -1,7 +1,16 @@
 class Api::SalesController < ApplicationController
 
   def create
-    render json: {}, status: 201
+    sales = params[:sales].map do |sale|
+      Sale.create(secure_sale_params(sale))
+    end
+    render json: { sales: sales.as_json }, status: 201
+  end
+
+  private
+
+  def secure_sale_params(params)
+    params.permit(:date, :time, :code, :value)
   end
 
 end

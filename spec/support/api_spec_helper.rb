@@ -16,3 +16,7 @@ def sales_params
     ]
   }
 end
+
+def json_response
+  JSON.parse(response.body)
+end
