@@ -61,18 +61,4 @@ RSpec.describe Sale, :type => :model do
     end
   end
 
-  describe '#authorized?' do
-    subject{ sale_factory }
-    context 'with the correct password' do
-      it do
-        expect(subject.authorized?('strongpassword')).to be true
-      end
-    end
-    context 'with an incorrect password' do
-      it do
-        expect(subject.authorized?('wrongpassword')).to be false
-      end
-    end
-  end
-
 end
