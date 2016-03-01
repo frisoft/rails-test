@@ -4,19 +4,19 @@ class Api::SalesController < ApplicationController
 
   def create
     sales = [params[:sales]].flatten.map do |sale|
-      new_sale = WithPassword.new(Sale.new)
-      new_sale.attributes = secure_sale_params(sale)
+      sale_model = SaleModel.new
+      sale_model.attributes = secure_sale_params(sale)
+      new_sale = WithPassword.new(sale_model)
       new_sale.save!
       new_sale
-      #Sale.create(secure_sale_params(sale))
     end
     render json: {
-      sales: sales.as_json(only: [:id, :code, :value, :password], methods: [:date, :time])
+      sales: sales.as_json(only: [:id, :date, :time, :code, :value, :password])
     }, status: 201
   end
 
   def show
-    render json: @sale.as_json(only: [:id, :code, :value], methods: [:date, :time]), status: 200
+    render json: @sale.as_json(only: [:id, :date, :time, :code, :value]), status: 200
   end
 
   def destroy
@@ -32,7 +32,7 @@ class Api::SalesController < ApplicationController
   end
 
   def get_sale
-    @sale = Sale.find_by_id(params[:id])
+    @sale = SaleModel.find_by_id(params[:id])
     unless @sale
       render json: {error: 'sale not found'}, status: 404
       return false

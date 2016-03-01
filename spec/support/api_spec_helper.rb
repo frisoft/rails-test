@@ -33,7 +33,7 @@ def json_response
 end
 
 def sale_factory
-  sale = WithPassword.new(Sale.new({date: '20160227', time: '2012', code: 'AB', value: 12.99}))
+  sale = WithPassword.new(SaleModel.new({date: '20160227', time: '2012', code: 'AB', value: 12.99}))
   sale.password = 'strongpassword'
   sale.save!
   sale
