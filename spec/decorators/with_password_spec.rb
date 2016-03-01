@@ -4,7 +4,7 @@ describe WithPassword do
 
   describe '.new' do
 
-    let(:model){ double('Model instance', a_method: 'RESULT') }
+    let(:model){ OpenStruct.new(a_method: 'RESULT', encrypted_password: nil) }
     subject{ described_class.new(model) }
 
     it 'returns an intance with all the methods of the model given as agument' do
