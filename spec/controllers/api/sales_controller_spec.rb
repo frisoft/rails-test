@@ -27,8 +27,8 @@ RSpec.describe Api::SalesController, :type => :controller do
   end
 
   describe 'GET sale' do
+    let!(:sale) { sale_factory }
     context "getting an existing sale" do
-      let!(:sale) { sale_factory }
       it 'returns the sale' do
         get :show, id: sale.id, password: 'strongpassword'
         json = json_response
@@ -39,6 +39,12 @@ RSpec.describe Api::SalesController, :type => :controller do
       it 'returns status 404' do
         get :show, id: 666
         expect(response).to have_http_status(404)
+      end
+    end
+    context "getting sale with a wrong password" do
+      it 'returns status 401' do
+        get :show, id: sale.id, password: 'wrongpassword'
+        expect(response).to have_http_status(401)
       end
     end
   end

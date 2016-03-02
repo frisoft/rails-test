@@ -1,46 +1,37 @@
 class Api::SalesController < ApplicationController
 
-  before_action :get_sale,  only: [:show, :destroy]
-
   def create
-    sales = [params[:sales]].flatten.map do |sale|
-      sale_model = SaleModel.new
-      sale_model.attributes = secure_sale_params(sale)
-      new_sale = WithPassword.new(sale_model)
-      new_sale.save!
-      new_sale
-    end
+    SaleCreator.new(self).create(params)
+  end
+
+  def show
+    SaleGetter.new(self).get(params[:id], params[:password])
+  end
+
+  def destroy
+    SaleDestroyer.new(self).destroy(params[:id], params[:password])
+  end
+
+  def sales_created_succesfully(sales)
     render json: {
       sales: sales.as_json(only: [:id, :date, :time, :code, :value, :password])
     }, status: 201
   end
 
-  def show
-    render json: @sale.as_json(only: [:id, :date, :time, :code, :value]), status: 200
+  def sale_found(sale)
+    render json: sale.as_json(only: [:id, :date, :time, :code, :value]), status: 200
   end
 
-  def destroy
-    if @sale.destroy
-      render json: {message: 'sale deleted'}, status: 200
-    end
+  def sale_not_found
+    render json: {error: 'sale not found'}, status: 404
   end
 
-  private
-
-  def secure_sale_params(params)
-    params.permit(:date, :time, :code, :value)
+  def sale_get_unhautorized
+    render json: {error: 'Unauthorized'}, status: 401
   end
 
-  def get_sale
-    @sale = SaleModel.find_by_id(params[:id])
-    unless @sale
-      render json: {error: 'sale not found'}, status: 404
-      return false
-    end
-    unless Authorizer.new(@sale).authorize?(params[:password])
-      render json: {error: 'Unauthorized'}, status: 401
-      return false
-    end
+  def sale_destroyed(sale)
+    render json: {message: 'sale deleted'}, status: 200
   end
 
 end
